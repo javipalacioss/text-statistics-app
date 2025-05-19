@@ -39,6 +39,8 @@ text-statistics-app/
 
 Abre frontend/index.html en tu navegador.
 
+![image](https://github.com/user-attachments/assets/acd71098-50f6-4e3b-b2bc-a53b6a422edc)
+
 ⚠️ El backend debe estar ejecutándose en localhost:8000
 
 ### Opción 2: Desde la terminal con curl (tener inicido localhost --> php -S localhost:8000)

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contador de Palabras</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Analizador de Texto</h1>
+    <textarea id="textInput" rows="10" cols="50"></textarea><br>
+    <button onclick="sendText()">Enviar</button>
+    <div id="results"></div>
+
+    <script>
+        function sendText() {
+            const text = document.getElementById('textInput').value;
+            fetch('../backend/index.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let resultHTML = '<h2>Resultados</h2><ul>';
+                for (let word in data) {
+                    resultHTML += `<li>${word}: ${data[word]}</li>`;
+                }
+                resultHTML += '</ul>';
+                document.getElementById('results').innerHTML = resultHTML;
+            });
+        }
+    </script>
+</body>
+</html>
+

@@ -51,3 +51,30 @@ El comando de arriba va con barras pero github es tan bueno que me las quita aut
 
 ![image](https://github.com/user-attachments/assets/3a8af0ee-e904-48de-971f-5bd3ddc15654)
 
+## ✅ Testing y Calidad de Código
+
+- Se han implementado pruebas unitarias con **PHPUnit** que cubren entre el **80% y 90% del código**.  
+- Las pruebas garantizan que cada módulo funciona de forma independiente y correcta.  
+- Se usa un **hook de Git pre-push** que ejecuta automáticamente los tests antes de permitir subir cambios al repositorio.  
+- Si algún test falla, el push se cancela y muestra un mensaje de error, evitando introducir código con errores en el repositorio.
+
+## 🛠️ Uso del Hook pre-push
+
+- El hook está ubicado en `.git/hooks/pre-push` y está escrito en PHP.  
+- Al hacer `git push`, se ejecutan los tests automáticamente:  
+  - Si todos pasan, el push se realiza con normalidad.  
+  - Si algún test falla, muestra un mensaje de error y cancela el push.  
+- Esto asegura que solo código probado y estable llega a las ramas principales (`develop` y `main`).
+
+## 📋 Buenas Prácticas de Git
+
+- Se trabaja con ramas `main` (estable), `develop` (desarrollo) y ramas funcionales para nuevas características.  
+- No se hacen commits directamente en `main`.  
+- Se realizan commits pequeños y frecuentes con mensajes claros que resumen los cambios.  
+- Antes de hacer push, siempre se actualiza la rama local con `git pull`.  
+
+## 🚀 Despliegue y Desarrollo Futuro
+
+- La app está preparada para ser desplegada en cualquier servidor con PHP.  
+- Se pueden añadir más funcionalidades y tests para ampliar la aplicación.  
+- El workflow con Git y los hooks automatizan la calidad y estabilidad del código. 

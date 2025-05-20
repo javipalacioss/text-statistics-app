@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"TextAnalyzerTest::testCleanTextRemovesStopwords":0.163,"TextAnalyzerTest::testCountWordsReturnsCorrectFrequencies":0.006,"TextAnalyzerTest::testPunctuationIsRemoved":0.004,"TextAnalyzerTest::testEmptyTextReturnsEmptyArray":0.006,"TextAnalyzerTest::testStopwordsAreCaseInsensitive":0.004}}

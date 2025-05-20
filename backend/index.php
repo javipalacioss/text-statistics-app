@@ -1,50 +1,36 @@
 <?php
+declare(strict_types=1);
+
 header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=UTF-8");
 
-// Función para limpiar y normalizar texto
-function cleanText($text, $stopwords)
-{
-    $text = strtolower($text);
-    $text = preg_replace('/[^\p{L}\p{N}\s]/u', '', $text); // quitar puntuación
-    $words = preg_split('/\s+/', $text);
+// Ruta a TextAnalyzer.php (carpeta padre)
+require_once __DIR__ . '/../TextAnalyzer.php';
 
-    return array_filter($words, function ($word) use ($stopwords) {
-        return $word !== '' && !in_array($word, $stopwords);
-    });
+// Ruta al stopwords.txt (misma carpeta)
+$stopwordsFile = __DIR__ . '/stopwords.txt';
+$stopwords = file($stopwordsFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+if ($stopwords === false) {
+    http_response_code(500);
+    echo json_encode(['error' => 'No se pudo cargar el archivo de stopwords']);
+    exit;
 }
 
-// Función principal de análisis
-function countWords($text, $stopwords)
-{
-    $words = cleanText($text, $stopwords);
-    $counts = [];
+$analyzer = new TextAnalyzer($stopwords);
 
-    foreach ($words as $word) {
-        if (!isset($counts[$word])) {
-            $counts[$word] = 0;
-        }
-        $counts[$word]++;
-    }
+$inputText = $_POST['text'] ?? '';
 
-    arsort($counts);
-    return $counts;
+if (trim($inputText) === '') {
+    http_response_code(400);
+    echo json_encode(['error' => 'El texto no puede estar vacío']);
+    exit;
 }
 
-// Cargar stopwords
-$stopwords = file('stopwords.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-$stopwords = array_map('strtolower', $stopwords);
-
-// Leer el cuerpo dependiendo del tipo de contenido
-$contentType = $_SERVER["CONTENT_TYPE"] ?? '';
-$inputText = '';
-
-if (strpos($contentType, 'application/json') !== false) {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $inputText = $data['text'] ?? '';
-} elseif (strpos($contentType, 'application/x-www-form-urlencoded') !== false) {
-    $inputText = $_POST['text'] ?? '';
+try {
+    $result = $analyzer->countWords($inputText);
+    echo json_encode($result, JSON_UNESCAPED_UNICODE);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Error al procesar el texto: ' . $e->getMessage()]);
 }
-
-// Procesar y responder
-echo json_encode(countWords($inputText, $stopwords), JSON_UNESCAPED_UNICODE);

@@ -1,0 +1,5 @@
+phpunit.xml.bak
+phpunit.cache
+coverage-report/
+vendor/
+.phpunit.result.cache
